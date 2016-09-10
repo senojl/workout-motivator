@@ -14,10 +14,12 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
 
     CalendarView calendarView;
-
-    SharedPreferences sharedPreferences = getPreferences(WorkoutActivity.MODE_PRIVATE);
-
-    String weight = sharedPreferences.getString("Weight","");
+    TextView enteredWeight;
+    TextView enteredSquats;
+    TextView enteredSquatPresses;
+    TextView enteredRows;
+    TextView enteredSwings;
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -26,12 +28,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         calendarView = (CalendarView) findViewById(R.id.CalendarView);
+        enteredWeight = (TextView) findViewById(R.id.EnteredWeight);
+        enteredSquats = (TextView) findViewById(R.id.EnteredSquats);
+        enteredSquatPresses = (TextView) findViewById(R.id.EnteredSquatPresses);
+        enteredRows = (TextView) findViewById(R.id.EnteredRows);
+        enteredSwings = (TextView) findViewById(R.id.EnteredSwings);
 
+        getSharedPreferences("default", MODE_PRIVATE);
 
+        sharedPreferences = getSharedPreferences("default", MODE_PRIVATE);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String weight = sharedPreferences.getString(WorkoutActivity.Weight, "");
+        String squats = sharedPreferences.getString(WorkoutActivity.Squats, "");
+        String squatPresses = sharedPreferences.getString(WorkoutActivity.SquatPresses, "");
+        String rows = sharedPreferences.getString(WorkoutActivity.Rows, "");
+        String swings = sharedPreferences.getString(WorkoutActivity.Swings, "");
+
+        enteredWeight.setText(weight);
+        enteredSquats.setText(squats);
+        enteredSquatPresses.setText(squatPresses);
+        enteredRows.setText(rows);
+        enteredSwings.setText(swings);
     }
 
     public void workoutEntry(View view) {
         Intent intent = new Intent(this, WorkoutActivity.class);
+        intent.putExtra("date", calendarView.getDate());
         startActivity(intent);
     }
 
